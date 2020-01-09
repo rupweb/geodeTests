@@ -1,0 +1,80 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.2.RELEASE")
+    }
+}
+
+plugins {
+  id 'org.springframework.boot' version '2.2.2.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+  id 'java'
+  id 'eclipse'
+}
+
+bootJar {
+    baseName = 'my-spring-boot'
+    version =  '0.1.0'
+}
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+    group = 'myPack'
+    description = 'my geode api'
+
+    implementation 'org.springframework:spring-test'
+    implementation 'org.springframework.data:spring-data-geode'
+    
+    // Geode tests
+    implementation 'org.springframework.data:spring-data-geode-test:0.0.11.RELEASE'
+    
+    implementation 'org.springframework.boot:spring-boot-starter-web'  
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'com.lmax:disruptor:3.3.5'
+    
+    // tag::actuator[]
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // end::actuator[]
+    
+    // Geode client
+    implementation 'org.springframework.geode:spring-geode-starter:1.2.2.RELEASE'
+    
+    // HTTP session manager
+    implementation 'org.springframework.session:spring-session-core'
+    
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.json:json:20190722'
+      
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.springframework.security:spring-security-test' 
+    testImplementation 'org.springframework.data:spring-data-geode-test'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+      exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+  useJUnitPlatform()
+}
+
+compileTestJava {
+  exclude 'my/AutoConfiguredSslIntegrationTests.java'
+  exclude 'my/ClientServerIntegrationTests.java'
+  exclude 'my/CmClientServerIT.java'
+  exclude 'pivotal/PivotalTest.java'
+}
